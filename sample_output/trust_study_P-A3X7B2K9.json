@@ -1,0 +1,62 @@
+[
+  {
+    "participant_id": "P-A3X7B2K9",
+    "condition": "B",
+    "condition_label": "Humanlike / high-confidence cues",
+    "trial": 1,
+    "scenario_id": "S1",
+    "decision": "accept",
+    "ai_confidence_shown_pct": 96,
+    "participant_confidence": 7,
+    "latency_ms": 3812,
+    "timestamp": "2026-03-13T10:14:22.341Z"
+  },
+  {
+    "participant_id": "P-A3X7B2K9",
+    "condition": "B",
+    "condition_label": "Humanlike / high-confidence cues",
+    "trial": 2,
+    "scenario_id": "S2",
+    "decision": "accept",
+    "ai_confidence_shown_pct": 91,
+    "participant_confidence": 6,
+    "latency_ms": 5204,
+    "timestamp": "2026-03-13T10:14:55.102Z"
+  },
+  {
+    "participant_id": "P-A3X7B2K9",
+    "condition": "B",
+    "condition_label": "Humanlike / high-confidence cues",
+    "trial": 3,
+    "scenario_id": "S3",
+    "decision": "accept",
+    "ai_confidence_shown_pct": 93,
+    "participant_confidence": 5,
+    "latency_ms": 4117,
+    "timestamp": "2026-03-13T10:15:28.887Z"
+  },
+  {
+    "participant_id": "P-A3X7B2K9",
+    "condition": "B",
+    "condition_label": "Humanlike / high-confidence cues",
+    "trial": 4,
+    "scenario_id": "S4",
+    "decision": "reject",
+    "ai_confidence_shown_pct": 88,
+    "participant_confidence": 8,
+    "latency_ms": 7640,
+    "timestamp": "2026-03-13T10:16:01.554Z"
+  },
+  {
+    "participant_id": "P-A3X7B2K9",
+    "condition": "B",
+    "condition_label": "Humanlike / high-confidence cues",
+    "trial": 5,
+    "scenario_id": "S5",
+    "decision": "accept",
+    "ai_confidence_shown_pct": 95,
+    "participant_confidence": 4,
+    "latency_ms": 2988,
+    "timestamp": "2026-03-13T10:16:34.201Z"
+  }
+]

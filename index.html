@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Trust Study — ISSR · University of Alabama</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ══ SCREEN 1: WELCOME ══════════════════════════════════════════════════ -->
+  <div class="screen active" id="screen-welcome">
+    <div class="welcome-card">
+      <div class="welcome-header">
+        <span class="org">ISSR · University of Alabama · HumanAI / GSoC 2026</span>
+        <span class="study-id">STUDY-ISSR3-001</span>
+      </div>
+      <div class="welcome-body">
+        <div class="kicker">Screening Prototype · Trust Attribution Research</div>
+        <h1>Humanlike AI Systems<br>and Trust Attribution</h1>
+        <p class="desc">
+          You will evaluate a series of AI-generated recommendations across different decision
+          domains. For each scenario, indicate whether you choose to accept or override the
+          AI's recommendation. Your response latency is recorded.
+        </p>
+
+        <div class="meta-grid">
+          <div class="meta-cell">
+            <div class="m-label">Duration</div>
+            <div class="m-val">~3 minutes</div>
+          </div>
+          <div class="meta-cell">
+            <div class="m-label">Trials</div>
+            <div class="m-val">5 scenarios</div>
+          </div>
+          <div class="meta-cell">
+            <div class="m-label">Design</div>
+            <div class="m-val">A/B randomized</div>
+          </div>
+        </div>
+
+        <div class="consent-block">
+          <strong>Participation notice:</strong> You will be randomly assigned to one of two
+          interface conditions. Responses — decision choices and response latency — are logged
+          anonymously via structured event schema. No personally identifying information is collected.
+        </div>
+
+        <button class="btn-primary" onclick="startExperiment()">→ Begin Study</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 2: EXPERIMENT ═══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-experiment">
+    <div class="exp-topbar">
+      <span class="pid" id="topbar-pid"></span>
+      <span class="trial-counter">
+        Trial <span id="q-current">1</span> / <span id="q-total">5</span>
+      </span>
+      <span class="cond-badge" id="condition-label"></span>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+
+    <!-- AI output panel -->
+    <div class="ai-panel">
+      <div class="ai-panel-header">
+        <div class="ai-sigil" id="ai-avatar"></div>
+        <div class="ai-id-block">
+          <div class="ai-name" id="ai-name"></div>
+          <div class="ai-role" id="ai-role"></div>
+        </div>
+      </div>
+      <div class="ai-panel-body">
+        <div class="output-label">AI Output</div>
+        <p id="ai-message"></p>
+        <div class="conf-line">
+          <span class="conf-tag" id="confidence-badge"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario panel -->
+    <div class="scenario-panel">
+      <div class="scenario-panel-header">
+        <span class="s-label">Scenario Description</span>
+        <span class="s-id" id="scenario-id-label">S-01</span>
+      </div>
+      <div class="scenario-panel-body" id="scenario-text"></div>
+    </div>
+
+    <!-- Participant confidence slider -->
+    <div class="conf-slider-panel">
+      <div class="cs-label">
+        Your confidence in this decision
+        <span id="conf-display">5</span> / 10
+      </div>
+      <div class="slider-row">
+        <span class="ep">Not confident</span>
+        <input
+          type="range" min="1" max="10" value="5" id="conf-slider"
+          oninput="document.getElementById('conf-display').textContent = this.value"
+        >
+        <span class="ep r">Very confident</span>
+      </div>
+    </div>
+
+    <!-- Decision buttons -->
+    <div class="decision-row">
+      <button class="btn-decision accept" onclick="recordDecision('accept')">
+        <span class="d-icon">[ ✓ ]</span>
+        Accept Recommendation
+        <span class="d-sub">Follow AI Advice</span>
+      </button>
+      <button class="btn-decision reject" onclick="recordDecision('reject')">
+        <span class="d-icon">[ ✗ ]</span>
+        Override / Reject
+        <span class="d-sub">Disregard AI Advice</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 3: RESULTS ══════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-results">
+    <div class="results-header">
+      <h2>Session Complete — Event Log</h2>
+      <span class="r-pid" id="results-pid"></span>
+    </div>
+    <div class="results-body">
+      <div class="results-sub" id="results-sub"></div>
+
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <div class="s-lbl">Accepted</div>
+          <div class="s-val" id="stat-accept">—</div>
+          <div class="s-unit">of 5 trials</div>
+        </div>
+        <div class="stat-cell">
+          <div class="s-lbl">Avg latency</div>
+          <div class="s-val" id="stat-latency">—</div>
+          <div class="s-unit">ms</div>
+        </div>
+        <div class="stat-cell">
+          <div class="s-lbl">Condition</div>
+          <div class="s-val" id="stat-condition">—</div>
+          <div class="s-unit" id="stat-condition-sub"></div>
+        </div>
+        <div class="stat-cell">
+          <div class="s-lbl">Avg confidence</div>
+          <div class="s-val" id="stat-confidence">—</div>
+          <div class="s-unit">/ 10</div>
+        </div>
+      </div>
+
+      <div class="export-row">
+        <button class="btn-export" onclick="downloadJSON()">↓ Export JSON</button>
+        <button class="btn-export" onclick="downloadCSV()">↓ Export CSV</button>
+      </div>
+
+      <button class="btn-reset" onclick="resetExperiment()">↺ New Participant Session</button>
+
+      <div class="log-section">
+        <div class="log-section-hdr">Raw Event Log</div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Cond</th>
+              <th>Decision</th>
+              <th>Latency (ms)</th>
+              <th>Conf.</th>
+              <th>Timestamp (UTC)</th>
+            </tr>
+          </thead>
+          <tbody id="log-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="footnote">
+        STUDY-ISSR3-001 · GSoC 2026 Screening Prototype · HumanAI / ISSR · University of Alabama<br>
+        Design: random A/B assignment per session. Cond-A = formal/neutral cues (System 4.1, calibrated confidence 72–94%).
+        Cond-B = humanlike cues + overstated certainty (Alex, 88–99%).<br>
+        Latency measured via <code>performance.now()</code> from question render to decision click. No PII collected.
+      </div>
+    </div>
+  </div>
+
+  <script src="experiment.js"></script>
+</body>
+</html>
